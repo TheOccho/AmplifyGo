@@ -1,0 +1,2 @@
+# AmplifyGo
+Outbrain Hackathon
