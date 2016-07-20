@@ -1,0 +1,29 @@
+{
+  "name": "amplify-go",
+  "version": "1.0.0",
+  "description": "Outbrain Hackathon",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheOccho/AmplifyGo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheOccho/AmplifyGo/issues"
+  },
+  "homepage": "https://github.com/TheOccho/AmplifyGo#readme",
+  "dependencies": {
+    "@kikinteractive/kik": "^2.0.8",
+    "express": "^4.14.0",
+    "request": "^2.73.0",
+    "request-promise": "^4.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
+}
