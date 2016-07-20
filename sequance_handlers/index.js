@@ -5,9 +5,14 @@ function _stepOne() {
 	// Fetch marketers
 	return api.getMarketers().then(function(body) {
 		const _marketerId = body.marketers[0].id;
-		api.getCampaigns(_marketerId).then(function(body) {
-			console.dir(body);
-			return  ['a', 't'];
+		return api.getCampaigns(_marketerId).then(function(body) {
+			// TODO: save to node storage
+			console.dir(body.campaigns);
+			var keyboards = [];
+			for (var i=0; i < body.count; i++) {
+				keyboards.push(body.campaigns[i].name);
+			}
+			return keyboards;
 		});
 	});
 }
@@ -15,7 +20,6 @@ function _stepOne() {
 module.exports.handleSequence = function(index, message) {
 	switch(index) {
 		case 1:
-		console.log('&&&&&&&&', _stepOne(message));
-			return _stepOne(message);
+		return _stepOne(message);
 	}
 };
