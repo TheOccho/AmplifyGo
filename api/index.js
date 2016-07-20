@@ -1,4 +1,5 @@
 var requestHelper = require('../utils/request');
+var momement = require('moment');
 
 /**
  * @function getMarketers Gets a list of marketers
@@ -48,4 +49,13 @@ module.exports.getPerformanceByDay = function getPerformanceByDay(campaignId, pa
   params.limit = params.limit || 10;
   params.sort = params.sort || '+date';
   return requestHelper({url: `/campaigns/${campaignId}/performanceByDay`, qs: params});
+};
+
+/**
+ * @function updateBudget Update an existing budget
+ * @param {string} budgetId The budget ID to update
+ */
+module.exports.updateBudget = function updateBudget(budgetId, amount) { 
+  const endDate = moment().add(1, 'days').format('YYYY-MM-DD');
+  return requestHelper({url: `/budgets/${budgetId}`, method: 'PUT', headers: {'Content-Type': 'application/json'}, json: {amount, endDate} });
 };

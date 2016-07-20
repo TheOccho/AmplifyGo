@@ -20,6 +20,7 @@
   "dependencies": {
     "@kikinteractive/kik": "^2.0.8",
     "node-cache": "^3.2.1",
+    "quiche": "0.0.10",
     "request": "^2.73.0",
     "request-promise": "^4.0.2"
   },
