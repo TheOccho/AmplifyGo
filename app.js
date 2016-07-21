@@ -4,51 +4,64 @@ var http = require('http');
 
 var sequence_handler = require('./sequance_handlers');
 
-var userFlowMap = {
-	'dafna_gidony': {index:0, prev_keyboards:[]},
-	'sbassal': {index:0, prev_keyboards:[]}
+global.userFlowMap = {
+	'dafna_gidony': {index:0, prev_keyboards:[], accounts:{}, campaigns:{}, selections: {
+		account_name: null,
+		campaign_name: null,
+		from_date: null
+	}},
+	'sbassal': {index:0, prev_keyboards:[], accounts:{}, campaigns:{}, selections: {
+		account_name: null,
+		campaign_name: null,
+		from_date: null
+	}},
+	'theoccho': {index:0, prev_keyboards:[], accounts:{}, campaigns:{}, selections: {
+		account_name: null,
+		campaign_name: null,
+		from_date: null
+	}},
+	'podipenay': {index:0, prev_keyboards:[], accounts:{}, campaigns:{}, selections: {
+		account_name: null,
+		campaign_name: null,
+		from_date: null
+	}}
 };
 
-var bot = new Bot({
+global.bot = new Bot({
   username: 'dashbot',
   apiKey: process.env.KIK_API_KEY,
   baseUrl: process.env.KIK_BASE_URL
 });
 
-bot.updateBotConfiguration();
+global.bot.updateBotConfiguration();
 
-bot.onStartChattingMessage(function(message) {
-	console.log('((())))))', message);
-    bot.getUserProfile(message.from)
-        .then((user) => {
-        		userFlowMap[user.id].index = 0;
-            message.reply(`Hey ${user.firstName}!`);
-        });
-});
+global.bot.onTextMessage(function(message) {
+	console.log('(((&&&&)))', global.userFlowMap[message.from].prev_keyboards, message.body);
 
-
-bot.onTextMessage(function(message) {
-	console.log('(((&&&&)))', userFlowMap[message.from].prev_keyboards, message.body);
+	if (global.userFlowMap[message.from].index == 6 && isNaN(message.body)) {
+		return message.reply('Please enter a valid budget.');
+	}
 	//test if messagevalid value
-	if (userFlowMap[message.from].prev_keyboards.indexOf(message.body) !== -1 || !userFlowMap[message.from].index){
-    userFlowMap[message.from].index++;
+	if (global.userFlowMap[message.from].prev_keyboards.indexOf(message.body) !== -1 || !global.userFlowMap[message.from].index || global.userFlowMap[message.from].index == 6){
+    global.userFlowMap[message.from].index++;
 
-    console.log('~~~~~SUCCESS~~~~~', userFlowMap[message.from].index);
-		sequence_handler.handleSequence(userFlowMap[message.from].index, message).then(function(keyboards) {
-			userFlowMap[message.from].prev_keyboards = keyboards;
-			bot.send(Bot.Message.text("Choose a campaign:").addResponseKeyboard(keyboards),message.from);
+    console.log('~~~~~SUCCESS~~~~~', global.userFlowMap[message.from].index);
+		sequence_handler.handleSequence(global.userFlowMap[message.from].index, message).then(function(resp) {
+			if (!resp.noMessage) {
+				global.userFlowMap[message.from].prev_keyboards = resp.keyboards;
+				global.bot.send(Bot.Message.text(resp.text).addResponseKeyboard(resp.keyboards),message.from);
+			}
 		});
   }
   else{
-		console.log('~~~~~ERROR!!!!!!~~~~~');
     message.reply('Choose again');
-		bot.send(Bot.Message.text("Choose a campaign:").addResponseKeyboard(userFlowMap[message.from].prev_keyboards),message.from);
+		global.bot.send(Bot.Message.text("Choose a campaign:").addResponseKeyboard(global.userFlowMap[message.from].prev_keyboards),message.from);
   }
 	
 });
 
 
 var server = http
-  .createServer(bot.incoming())
+  .createServer(global.bot.incoming())
   .listen(process.env.PORT || 3000);
   

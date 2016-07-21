@@ -1,5 +1,5 @@
 var requestHelper = require('../utils/request');
-var momement = require('moment');
+var moment = require('moment');
 
 /**
  * @function getMarketers Gets a list of marketers
@@ -55,7 +55,7 @@ module.exports.getPerformanceByDay = function getPerformanceByDay(campaignId, pa
  * @function updateBudget Update an existing budget
  * @param {string} budgetId The budget ID to update
  */
-module.exports.updateBudget = function updateBudget(budgetId, amount) { 
+module.exports.updateBudget = function updateBudget(budgetId, amount) {
   const endDate = moment().add(1, 'days').format('YYYY-MM-DD');
   return requestHelper({url: `/budgets/${budgetId}`, method: 'PUT', headers: {'Content-Type': 'application/json'}, json: {amount, endDate} });
 };
